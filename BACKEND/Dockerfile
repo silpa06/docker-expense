@@ -5,8 +5,7 @@ WORKDIR /app
 COPY package.json .
 RUN npm install
 COPY *.js .
-ENV DB_HOST="mysql" \
-    User="expense" 
+ENV DB_HOST="localhost" 
 CMD ["/app", "index.js"]
 
 
