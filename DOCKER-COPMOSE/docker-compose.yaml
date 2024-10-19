@@ -7,14 +7,20 @@ services:
   mysql:
     image: silpa11/mysql:v1
     container_name: mysql
+    networks:
+      - expense 
     volumes:
       - mysql:var/lib/mysql
   backend:
     image: silpa11/backend:v1
     container_name: backend
+    networks:
+      - expense
   frontend:
     image: silpa11/frontend:v1
     container_name: frontend
+    networks:
+      - expense
     ports:
       - 80:80
 
