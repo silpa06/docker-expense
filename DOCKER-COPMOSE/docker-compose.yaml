@@ -12,9 +12,13 @@ services:
   backend:
     image: silpa11/backend:v1
     container_name: backend
+    depends_on:
+      - mysql
   frontend:
     image: silpa11/frontend:v1
     container_name: frontend
+    depends_on:
+      - backend
     ports:
       - 80:80
 
