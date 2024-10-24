@@ -41,7 +41,7 @@ RUN addgroup -S expense && adduser -S expense -G expense
 COPY nginx.conf /etc/nginx/nginx.conf 
 COPY expense.conf /etc/nginx/conf.d/default.conf
 COPY code /usr/share/nginx/html
-RUN chown -R expense:expense /usr/share/nginx/html /etc/nginx/nginx.conf /etc/nginx/conf.d/default.conf
+RUN chown -R expense:expense /usr/share/nginx/html /etc/nginx/nginx.conf /etc/nginx/conf.d/default.conf /var/cache/nginx/client_temp
 EXPOSE 80
 # RUN sed -i '/user/d' /etc/nginx/nginx.conf
 USER expense
