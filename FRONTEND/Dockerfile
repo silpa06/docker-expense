@@ -1,50 +1,19 @@
-    # FROM nginx AS builder
-    # RUN rm -rf /usr/share/nginx/html/*
-    # COPY code /usr/share/nginx/html
-    # # RUN addgroup -S expense && adduser -S expense -G expense
-    # # RUN chown -R expense:expense /usr/share/nginx/html /etc/nginx/conf.d
-    # COPY expense.conf /etc/nginx/conf.d/default.conf
+FROM nginx:mainline-alpine3.20-slim
 
-
-    # Use the official NGINX Alpine image
-
-
-
-
-
-
-    # FROM nginx:alpine
-    # EXPOSE 80
-    # RUN addgroup -S expense && adduser -S expense -G expense
-    # RUN mkdir -p /var/cache/nginx && \
-    #     chown -R expense:expense /var/cache/nginx /usr/share/nginx/html /etc/nginx/conf.d
-    # COPY --from=builder /usr/share/nginx/html /usr/share/nginx/html 
-    # COPY --from=builder /etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf
-    # RUN chown -R expense:expense /usr/share/nginx/html /etc/nginx/conf.d
-    # RUN sed -i '/user/d' /etc/nginx/nginx.conf
-    # USER expense
-    # CMD ["nginx", "-g", "daemon off;"]
-
-
-    # before size optimization
-    # FROM nginx 
-    # EXPOSE 80
-    # RUN rm -rf /usr/share/nginx/html/*
-    # COPY code /usr/share/nginx/html
-    # # COPY code /etc/nginx/html
-    # COPY expense.conf /etc/nginx/conf.d/default.conf
-    # CMD ["nginx", "-g", "daemon off;"]
-
-FROM nginx:alpine
-RUN addgroup -S expense && adduser -S expense -G expense
-RUN mkdir -p /var/cache/nginx/client_temp /var/run/nginx.pid && \
-   chown -R expense:expense /var/cache/nginx /var/run/nginx.pid
-# COPY expense.conf /etc/nginx/conf.d/default.conf
-COPY nginx.conf /etc/nginx/nginx.conf 
-COPY expense.conf /etc/nginx/conf.d/default.conf
+RUN rm -rf /etc/nginx/nginx.conf && \
+    rm -rf /etc/nginx/conf.d/default.conf && \
+    mkdir -p /var/cache/nginx/client_temp && \
+    mkdir -p /var/cache/nginx/proxy_temp && \
+    mkdir -p /var/cache/nginx/fastcgi_temp && \
+    mkdir -p /var/cache/nginx/uwsgi_temp && \
+    mkdir -p /var/cache/nginx/scgi_temp && \
+    chown -R nginx:nginx /var/cache/nginx && \
+    chown -R nginx:nginx /etc/nginx/ && \
+    chmod -R 755 /etc/nginx/ && \
+    chown -R nginx:nginx /var/log/nginx && \
+    touch /var/run/nginx.pid && \
+    chown -R nginx:nginx /var/run/nginx.pid /run/nginx.pid
+COPY nginx.conf /etc/nginx/nginx.conf
 COPY code /usr/share/nginx/html
-RUN chown -R expense:expense /usr/share/nginx/html /etc/nginx/nginx.conf /etc/nginx/conf.d/default.conf /var/cache/nginx/client_temp
-EXPOSE 80
-# RUN sed -i '/user/d' /etc/nginx/nginx.conf
-USER expense
-CMD ["nginx", "-g", "daemon off;"]
+USER nginx
+#COPY expense.conf /etc/nginx/conf.d/expense.conf
