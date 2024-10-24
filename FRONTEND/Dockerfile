@@ -9,9 +9,12 @@
     FROM nginx:alpine
     EXPOSE 80
     RUN addgroup -S expense && adduser -S expense -G expense
+    RUN mkdir -p /var/cache/nginx && \
+        chown -R expense:expense /var/cache/nginx /usr/share/nginx/html /etc/nginx/conf.d
     COPY --from=builder /usr/share/nginx/html /usr/share/nginx/html 
     COPY --from=builder /etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf
     RUN chown -R expense:expense /usr/share/nginx/html /etc/nginx/conf.d
+    RUN sed -i '/user/d' /etc/nginx/nginx.conf
     USER expense
     CMD ["nginx", "-g", "daemon off;"]
 
