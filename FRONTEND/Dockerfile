@@ -37,8 +37,8 @@
 
 FROM nginx:alpine
 RUN addgroup -S expense && adduser -S expense -G expense
-RUN mkdir -p /var/cache/nginx/client_temp && \
-   chown -R expense:expense /var/cache/nginx
+RUN mkdir -p /var/cache/nginx/client_temp /var/run/nginx.pid && \
+   chown -R expense:expense /var/cache/nginx /var/run/nginx.pid
 # COPY expense.conf /etc/nginx/conf.d/default.conf
 COPY nginx.conf /etc/nginx/nginx.conf 
 COPY expense.conf /etc/nginx/conf.d/default.conf
