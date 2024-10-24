@@ -9,9 +9,10 @@ RUN npm install
 FROM node:20-alpine 
 EXPOSE 8080 
 WORKDIR /app
+
+RUN addgroup -S expense && adduser -S expense -G expense 
 COPY --from=builder /app /app
-RUN addgroup -S expense && adduser -S expense -G expense \
-    chown -R expense:expense /app
+RUN chown -R expense:expense /app
 ENV DB_HOST="mysql"
 USER expense
 CMD ["node", "index.js"] 
