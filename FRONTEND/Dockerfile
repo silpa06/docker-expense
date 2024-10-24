@@ -37,12 +37,11 @@
 
 FROM nginx:alpine
 RUN addgroup -S expense && adduser -S expense -G expense
-RUN mkdir -p /var/run/nginx /var/cache/nginx && \
-    chown -R expense:expense /var/run /var/cache/nginx
 # COPY expense.conf /etc/nginx/conf.d/default.conf
 COPY nginx.conf /etc/nginx/nginx.conf 
+COPY expense.conf /etc/nginx/conf.d/default.conf
 COPY code /usr/share/nginx/html
-RUN chown -R expense:expense /usr/share/nginx/html /etc/nginx/nginx.conf 
+RUN chown -R expense:expense /usr/share/nginx/html /etc/nginx/nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
 # RUN sed -i '/user/d' /etc/nginx/nginx.conf
 USER expense
