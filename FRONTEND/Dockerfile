@@ -37,7 +37,7 @@
 
 FROM nginx:alpine
 RUN addgroup -S expense && adduser -S expense -G expense
-COPY default.conf /etc/nginx/conf.d/default.conf
+COPY expense.conf /etc/nginx/conf.d/default.conf
 COPY code /usr/share/nginx/html
 RUN chown -R expense:expense /usr/share/nginx/html /etc/nginx/conf.d
 EXPOSE 80
