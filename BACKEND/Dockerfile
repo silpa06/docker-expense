@@ -1,6 +1,6 @@
 # after size optimization
 FROM node:20 AS builder
-RUN mkdir /app
+# RUN mkdir /app
 WORKDIR /app
 COPY package.json .
 COPY *.js . 
@@ -8,9 +8,10 @@ RUN npm install
 
 FROM node:20-alpine 
 EXPOSE 8080 
-RUN addgroup -S expense && adduser -S expense -G expense
 WORKDIR /app
 COPY --from=builder /app /app
+RUN addgroup -S expense && adduser -S expense -G expense \
+    chown -R expense:expense /app
 ENV DB_HOST="mysql"
 USER expense
 CMD ["node", "index.js"] 
