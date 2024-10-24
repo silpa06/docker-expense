@@ -1,15 +1,17 @@
     FROM nginx AS builder
     RUN rm -rf /usr/share/nginx/html/*
     COPY code /usr/share/nginx/html
-    RUN addgroup -S expense && adduser -S expense -G expense
-    RUN chown -R expense:expense /usr/share/nginx/html /etc/nginx/conf.d
+    # RUN addgroup -S expense && adduser -S expense -G expense
+    # RUN chown -R expense:expense /usr/share/nginx/html /etc/nginx/conf.d
     COPY expense.conf /etc/nginx/conf.d/default.conf
 
 
     FROM nginx:alpine
     EXPOSE 80
+    RUN addgroup -S expense && adduser -S expense -G expense
     COPY --from=builder /usr/share/nginx/html /usr/share/nginx/html 
     COPY --from=builder /etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf
+    RUN chown -R expense:expense /usr/share/nginx/html /etc/nginx/conf.d
     USER expense
     CMD ["nginx", "-g", "daemon off;"]
 
